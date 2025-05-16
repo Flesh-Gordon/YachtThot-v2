@@ -17,7 +17,7 @@ def format_reply(video, genres=None):
     bar = build_media_bar(duration)
 
     # Determine snark: genre-based or random
-    matched = [g for g in genres or [] if g in genre_snark_map]
+    matched = [g for g in (genres or []) if g.lower() in genre_snark_map]
     if matched:
         snark = genre_snark_map[matched[0]]
     else:
