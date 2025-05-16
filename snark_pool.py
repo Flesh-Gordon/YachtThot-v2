@@ -1,3 +1,4 @@
+#Snark
 import random
 
 SNARK_REPLIES = [
