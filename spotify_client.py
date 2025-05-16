@@ -1,8 +1,7 @@
-import os
-import requests
 from dotenv import load_dotenv
+import os
 
-load_dotenv()
+load_dotenv(dotenv_path="/home/thefleshgordon/YachtThot-v2/.env")
 
 SPOTIFY_CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
