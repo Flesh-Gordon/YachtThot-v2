@@ -6,7 +6,7 @@ def format_reply(video):
     duration = parse_duration(video["duration"])
     bar = build_media_bar(duration)
 
-    snark = get_snark_reply() if random.random() < 0.25 else ""
+    snark = get_snark_reply()  # always include snark for testing
 
     return f"""**NOW PLAYING:**
 
