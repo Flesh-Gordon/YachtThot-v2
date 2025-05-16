@@ -14,7 +14,8 @@ def get_spotify_token():
     auth_header = {
         "Authorization": "Basic " + base64.b64encode(
             f"{SPOTIFY_CLIENT_ID}:{SPOTIFY_CLIENT_SECRET}".encode()
-        ).decode()
+        ).decode(),
+        "Content-Type": "application/x-www-form-urlencoded"
     }
     data = {
         "grant_type": "client_credentials"
