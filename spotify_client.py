@@ -1,51 +1,54 @@
-from dotenv import load_dotenv
 import os
+import base64
 import requests
+from dotenv import load_dotenv
 
+# Load environment variables
 load_dotenv(dotenv_path="/home/thefleshgordon/YachtThot-v2/.env")
 
 SPOTIFY_CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 
 def get_spotify_token():
-    print("SPOTIFY_CLIENT_ID =", SPOTIFY_CLIENT_ID)
-    print("SPOTIFY_CLIENT_SECRET =", SPOTIFY_CLIENT_SECRET)
     auth_url = "https://accounts.spotify.com/api/token"
-    response = requests.post(auth_url, {
-        'grant_type': 'client_credentials',
-        'client_id': SPOTIFY_CLIENT_ID,
-        'client_secret': SPOTIFY_CLIENT_SECRET,
-    })
-    response.raise_for_status()
-    return response.json()['access_token']
-
-def search_track(query, token):
-    url = "https://api.spotify.com/v1/search"
-    headers = {"Authorization": f"Bearer {token}"}
-    params = {"q": query, "type": "track", "limit": 1}
-    response = requests.get(url, headers=headers, params=params)
-    response.raise_for_status()
-    items = response.json().get('tracks', {}).get('items', [])
-    if not items:
-        return None
-    track = items[0]
-    return {
-        "track_id": track["id"],
-        "name": track["name"],
-        "artist_id": track["artists"][0]["id"],
-        "artist_name": track["artists"][0]["name"]
+    auth_header = {
+        "Authorization": "Basic " + base64.b64encode(
+            f"{SPOTIFY_CLIENT_ID}:{SPOTIFY_CLIENT_SECRET}".encode()
+        ).decode()
+    }
+    data = {
+        "grant_type": "client_credentials"
     }
 
-def get_artist_genres(artist_id, token):
-    url = f"https://api.spotify.com/v1/artists/{artist_id}"
-    headers = {"Authorization": f"Bearer {token}"}
-    response = requests.get(url, headers=headers)
+    response = requests.post(auth_url, headers=auth_header, data=data)
     response.raise_for_status()
-    return response.json().get("genres", [])
+    return response.json()["access_token"]
 
 def get_genres_for_song(query):
+    print(f"Fetching genres for: {query}")
     token = get_spotify_token()
-    track = search_track(query, token)
-    if not track:
+    search_url = "https://api.spotify.com/v1/search"
+    headers = {
+        "Authorization": f"Bearer {token}"
+    }
+    params = {
+        "q": query,
+        "type": "track",
+        "limit": 1
+    }
+
+    search_response = requests.get(search_url, headers=headers, params=params)
+    search_response.raise_for_status()
+    results = search_response.json()
+
+    if results["tracks"]["items"]:
+        artist_id = results["tracks"]["items"][0]["artists"][0]["id"]
+        artist_url = f"https://api.spotify.com/v1/artists/{artist_id}"
+
+        artist_response = requests.get(artist_url, headers=headers)
+        artist_response.raise_for_status()
+        artist_data = artist_response.json()
+
+        return artist_data.get("genres", [])
+    else:
         return []
-    return get_artist_genres(track['artist_id'], token)
