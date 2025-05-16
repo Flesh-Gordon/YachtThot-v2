@@ -1,4 +1,4 @@
 #!/bin/bash
-cd /home/thefleshgordon/reddit_bot
+cd /home/thefleshgordon/YachtThot-v2
 git pull origin main
 systemctl restart yachtthot-bot.service
