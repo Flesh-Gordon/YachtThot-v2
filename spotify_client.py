@@ -11,15 +11,24 @@ SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 
 def get_spotify_token():
     auth_url = "https://accounts.spotify.com/api/token"
+    
+    # Base64 encode the client ID and secret
+    raw_auth = f"{SPOTIFY_CLIENT_ID}:{SPOTIFY_CLIENT_SECRET}"
+    encoded_auth = base64.b64encode(raw_auth.encode()).decode()
+
     auth_header = {
-        "Authorization": "Basic " + base64.b64encode(
-            f"{SPOTIFY_CLIENT_ID}:{SPOTIFY_CLIENT_SECRET}".encode()
-        ).decode(),
+        "Authorization": f"Basic {encoded_auth}",
         "Content-Type": "application/x-www-form-urlencoded"
     }
     data = {
         "grant_type": "client_credentials"
     }
+
+    # DEBUG: show the exact request
+    print("\n--- Spotify Auth Request ---")
+    print("Auth Header:", auth_header)
+    print("POST Data:", data)
+    print("----------------------------\n")
 
     response = requests.post(auth_url, headers=auth_header, data=data)
     response.raise_for_status()
@@ -28,6 +37,7 @@ def get_spotify_token():
 def get_genres_for_song(query):
     print(f"Fetching genres for: {query}")
     token = get_spotify_token()
+
     search_url = "https://api.spotify.com/v1/search"
     headers = {
         "Authorization": f"Bearer {token}"
