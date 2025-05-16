@@ -7,6 +7,8 @@ SPOTIFY_CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 
 def get_spotify_token():
+    print("SPOTIFY_CLIENT_ID =", SPOTIFY_CLIENT_ID)
+	print("SPOTIFY_CLIENT_SECRET =", SPOTIFY_CLIENT_SECRET)
     auth_url = "https://accounts.spotify.com/api/token"
     response = requests.post(auth_url, {
         'grant_type': 'client_credentials',
