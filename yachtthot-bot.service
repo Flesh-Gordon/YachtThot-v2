@@ -5,8 +5,8 @@ After=network.target
 [Service]
 Type=simple
 User=thefleshgordon
-WorkingDirectory=/home/thefleshgordon/reddit_bot
-ExecStart=/home/thefleshgordon/reddit_bot/venv/bin/python /home/thefleshgordon/reddit_bot/main.py
+WorkingDirectory=/home/thefleshgordon/YachtThot-v2
+ExecStart=/home/thefleshgordon/YachtThot-v2/venv/bin/python /home/thefleshgordon/YachtThot-v2/main.py
 Restart=always
 Environment="PYTHONUNBUFFERED=1"
 
