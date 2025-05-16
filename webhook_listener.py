@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    subprocess.Popen(["/bin/bash", "/home/thefleshgordon/reddit_bot/deploy.sh"])
+    subprocess.Popen(["/bin/bash", "/home/thefleshgordon/deploy-hook.sh"])
     return 'Webhook received and deploy triggered.', 200
 
 if __name__ == "__main__":
