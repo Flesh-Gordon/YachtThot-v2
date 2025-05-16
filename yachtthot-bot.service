@@ -1,0 +1,14 @@
+[Unit]
+Description=YachtThot Reddit Bot
+After=network.target
+
+[Service]
+Type=simple
+User=thefleshgordon
+WorkingDirectory=/home/thefleshgordon/reddit_bot
+ExecStart=/home/thefleshgordon/reddit_bot/venv/bin/python /home/thefleshgordon/reddit_bot/main.py
+Restart=always
+Environment="PYTHONUNBUFFERED=1"
+
+[Install]
+WantedBy=multi-user.target
