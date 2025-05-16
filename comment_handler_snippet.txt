@@ -1,0 +1,15 @@
+from spotify_client import get_genres_for_song
+from formatter import format_reply
+from youtube_client import get_video_details
+
+def handle_comment(comment):
+    query = comment.body.replace("YachtThot play", "", flags=re.IGNORECASE).strip()
+    video = get_video_details(query)
+
+    if not video:
+        comment.reply("Couldn’t find that one. Maybe try something less obscure.")
+        return
+
+    genres = get_genres_for_song(video["title"])
+    reply = format_reply(video, genres=genres)
+    comment.reply(reply)
