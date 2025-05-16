@@ -1,0 +1,14 @@
+[Unit]
+Description=YachtThot GitHub Webhook Listener
+After=network.target
+
+[Service]
+Type=simple
+User=thefleshgordon
+WorkingDirectory=/home/thefleshgordon/YachtThot-v2
+ExecStart=/home/thefleshgordon/YachtThot-v2/venv/bin/python /home/thefleshgordon/YachtThot-v2/webhook_listener.py
+Restart=always
+Environment="PYTHONUNBUFFERED=1"
+
+[Install]
+WantedBy=multi-user.target
