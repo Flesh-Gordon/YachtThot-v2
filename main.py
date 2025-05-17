@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 from reddit_client import reddit, subreddit
 from comment_handler import handle_comment
 import time
