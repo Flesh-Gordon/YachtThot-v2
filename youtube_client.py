@@ -1,16 +1,38 @@
-from googleapiclient.discovery import build
-from env_loader import load_env
+# youtube_client.py
 
-env = load_env()
+from youtubesearchpython import VideosSearch
 
-def get_video_details(query):
-    youtube = build("youtube", "v3", developerKey=env["YOUTUBE_API_KEY"])
-    search = youtube.search().list(q=query, part="snippet", type="video", maxResults=1).execute()
-    items = search.get("items", [])
-    if not items:
+def search_youtube_video(query):
+    try:
+        videos_search = VideosSearch(query, limit=5)
+        results = videos_search.result().get('result', [])
+
+        for video in results:
+            title = video['title']
+            link = video['link']
+            duration = video['duration']
+            channel = video['channel']['name']
+
+            # Prioritize official uploads if artist name is in the title
+            if query.lower().split(" by ")[-1] in title.lower():
+                return {
+                    'title': title,
+                    'url': link,
+                    'duration': duration,
+                    'channel': channel
+                }
+
+        # Fallback to first result
+        if results:
+            video = results[0]
+            return {
+                'title': video['title'],
+                'url': video['link'],
+                'duration': video['duration'],
+                'channel': video['channel']['name']
+            }
+
         return None
-    video_id = items[0]["id"]["videoId"]
-    title = items[0]["snippet"]["title"]
-    video = youtube.videos().list(part="contentDetails", id=video_id).execute()
-    duration = video["items"][0]["contentDetails"]["duration"]
-    return {"title": title, "id": video_id, "duration": duration}
+    except Exception as e:
+        print(f"[YouTube Search Error] {e}")
+        return None
