@@ -1,38 +1,51 @@
-from youtubesearchpython import VideosSearch
+import yt_dlp
 
 def search_youtube_video(query):
     try:
-        videos_search = VideosSearch(query, limit=5)
-        results = videos_search.result().get('result', [])
+        # Configure yt_dlp options
+        ydl_opts = {
+            'quiet': True,
+            'skip_download': True,
+            'extract_flat': True,
+            'format': 'bestaudio/best',
+        }
 
-        for video in results:
-            title = video['title']
-            link = video['link']
-            duration = video['duration']
-            channel = video['channel']['name']
+        # Perform a YouTube search
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            result = ydl.extract_info(f"ytsearch5:{query}", download=False)
+            videos = result.get("entries", [])
+            if not videos:
+                return None
 
-            # Prioritize if query includes " by [artist]" and artist appears in title
+            # Try to match based on " by Artist" in query
             if " by " in query:
                 artist = query.lower().split(" by ")[-1]
-                if artist in title.lower():
-                    return {
-                        'title': title,
-                        'url': link,
-                        'duration': duration,
-                        'channel': channel
-                    }
+                for video in videos:
+                    if artist in video.get("title", "").lower():
+                        return format_video_result(video)
 
-        # Fallback to first video result
-        if results:
-            video = results[0]
-            return {
-                'title': video['title'],
-                'url': video['link'],
-                'duration': video['duration'],
-                'channel': video['channel']['name']
-            }
+            # Fallback: return first result
+            return format_video_result(videos[0])
 
-        return None
     except Exception as e:
-        print(f"[YouTube Search Error] {e}")
+        print(f"[yt_dlp Error] {e}")
         return None
+
+def format_video_result(video):
+    return {
+        "title": video.get("title"),
+        "url": f"https://www.youtube.com/watch?v={video.get('id')}",
+        "duration": parse_duration(video.get("duration")),
+        "channel": video.get("uploader"),
+        "id": video.get("id")
+    }
+
+def parse_duration(seconds):
+    try:
+        if seconds is None:
+            return "0:00"
+        minutes = seconds // 60
+        sec = seconds % 60
+        return f"{minutes}:{sec:02d}"
+    except:
+        return "0:00"
