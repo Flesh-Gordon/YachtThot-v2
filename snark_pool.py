@@ -55,3 +55,6 @@ def get_genre_snark(genres):
 
 def get_fallback_snark():
     return random.choice(fallback_snark)
+    
+def get_snark_reply(genres=None):
+    return get_genre_snark(genres) or get_fallback_snark()
