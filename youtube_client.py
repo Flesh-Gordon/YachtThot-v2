@@ -1,4 +1,4 @@
-from youtube_search_python import VideosSearch
+from youtubesearchpython import VideosSearch
 
 def search_youtube_video(query):
     try:
