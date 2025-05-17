@@ -1,5 +1,3 @@
-# youtube_client.py
-
 from youtubesearchpython import VideosSearch
 
 def search_youtube_video(query):
@@ -13,16 +11,18 @@ def search_youtube_video(query):
             duration = video['duration']
             channel = video['channel']['name']
 
-            # Prioritize official uploads if artist name is in the title
-            if query.lower().split(" by ")[-1] in title.lower():
-                return {
-                    'title': title,
-                    'url': link,
-                    'duration': duration,
-                    'channel': channel
-                }
+            # Prioritize results that contain the artist name if formatted as "Song by Artist"
+            if " by " in query:
+                artist = query.lower().split(" by ")[-1]
+                if artist in title.lower():
+                    return {
+                        'title': title,
+                        'url': link,
+                        'duration': duration,
+                        'channel': channel
+                    }
 
-        # Fallback to first result
+        # Fallback to first result if no artist-specific match found
         if results:
             video = results[0]
             return {
