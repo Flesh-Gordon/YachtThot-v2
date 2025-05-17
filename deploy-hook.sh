@@ -4,4 +4,5 @@ git fetch origin snark-engine
 git checkout snark-engine
 git reset --hard
 git pull origin snark-engine --rebase
-sudo systemctl restart yachtthot-bot.service
+sudo systemctl restart yacht_thot_bot.service
+echo "[Deploy Hook] Updated and restarted at $(date)" >> /tmp/deploy-hook.log
