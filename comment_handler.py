@@ -20,10 +20,10 @@ def handle_comment(comment):
             genres = get_genres_for_song(video["title"])
             print("Genres returned:", genres)
 
-            # Get snark based on genre
+            # Try genre-based snark
             snark = get_genre_snark(genres)
 
-            # 25% chance of fallback snark if no genre matched
+            # If no genre match, apply fallback snark 25% of the time
             if not snark and random.random() < 0.25:
                 snark = get_fallback_snark()
 
