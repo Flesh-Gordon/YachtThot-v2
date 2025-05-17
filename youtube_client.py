@@ -11,7 +11,7 @@ def search_youtube_video(query):
             duration = video['duration']
             channel = video['channel']['name']
 
-            # Prioritize results that contain the artist name if formatted as "Song by Artist"
+            # Prioritize if query includes " by [artist]" and artist appears in title
             if " by " in query:
                 artist = query.lower().split(" by ")[-1]
                 if artist in title.lower():
@@ -22,7 +22,7 @@ def search_youtube_video(query):
                         'channel': channel
                     }
 
-        # Fallback to first result if no artist-specific match found
+        # Fallback to first video result
         if results:
             video = results[0]
             return {
