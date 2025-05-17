@@ -8,7 +8,7 @@ def format_reply(video, snark_override=None):
 
 [{video['title']}](https://www.youtube.com/watch?v={video['id']})
 
-{bar}  0:01 / {duration}
+{bar}
 
 {snark_override if snark_override else ""}
 """
