@@ -1,5 +1,6 @@
 import random
 
+# Genre-based snark pool
 genre_snark_map = {
     "christian": [
         "This one goes out to the youth pastor with an acoustic guitar.",
@@ -121,6 +122,7 @@ genre_snark_map = {
     ]
 }
 
+# General fallback snark pool
 fallback_snark = [
     "You woke up and chose mediocrity.",
     "This song has main character energy... in a straight-to-DVD sequel.",
@@ -135,7 +137,9 @@ def get_genre_snark(genres):
     genres = [g.lower() for g in genres]
     for key in genre_snark_map:
         if any(key in g for g in genres):
-            return random.choice(genre_snark_map[key])
+            snark = random.choice(genre_snark_map[key])
+            print(f"[Snark Match] Genre: '{key}' → Snark: '{snark}'")
+            return snark
     return None
 
 def get_fallback_snark():
