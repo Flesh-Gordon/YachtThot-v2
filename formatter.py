@@ -1,6 +1,6 @@
 from utils import parse_duration, build_media_bar
 import random
-from snark_pool import get_snark_reply
+from snark_pool import get_fallback_snark
 
 genre_snark_map = {
     "christian": [
@@ -74,53 +74,51 @@ genre_snark_map = {
         "This is why aliens won’t visit."
     ],
     "pornogrind": [
-    "I didn’t know your taste in music came with an NSFW tag.",
-    "This track should be required to knock first.",
-    "Even OnlyFans said ‘that’s a bit much.’"
+        "I didn’t know your taste in music came with an NSFW tag.",
+        "This track should be required to knock first.",
+        "Even OnlyFans said ‘that’s a bit much.’"
     ],
     "strip club": [
-    "This song smells like glitter and regret.",
-    "Please turn this off — I can smell Axe through the screen.",
-    "Someone’s definitely throwing singles at their phone right now."
+        "This song smells like glitter and regret.",
+        "Please turn this off — I can smell Axe through the screen.",
+        "Someone’s definitely throwing singles at their phone right now."
     ],
     "bedroom pop": [
-    "This isn’t romantic. It’s just sweaty.",
-    "This track comes with a side of awkward eye contact.",
-    "Sounds like someone made this while biting their lip in the mirror."
+        "This isn’t romantic. It’s just sweaty.",
+        "This track comes with a side of awkward eye contact.",
+        "Sounds like someone made this while biting their lip in the mirror."
     ],
     "dirty south": [
-    "You chose vibes over values. Respect.",
-    "YachtThot isn't liable for what happens if this gets played out loud.",
-    "This song needs an 18+ warning and a mop."
+        "You chose vibes over values. Respect.",
+        "YachtThot isn't liable for what happens if this gets played out loud.",
+        "This song needs an 18+ warning and a mop."
     ],
     "sex comedy": [
-    "It’s giving incel with a SoundCloud.",
-    "This track has the same energy as a fake moan.",
-    "Are you okay? No seriously."
+        "It’s giving incel with a SoundCloud.",
+        "This track has the same energy as a fake moan.",
+        "Are you okay? No seriously."
     ],
     "slow jam": [
-    "Mood: candles, bad decisions, and ignored texts.",
-    "This belongs on a playlist called ‘Regret in 3-5 business days.’",
-    "It’s less ‘slow jam,’ more ‘slow cringe.’"
+        "Mood: candles, bad decisions, and ignored texts.",
+        "This belongs on a playlist called ‘Regret in 3–5 business days.’",
+        "It’s less ‘slow jam,’ more ‘slow cringe.’"
     ],
     "r&b": [
-    "R&B used to be smooth. This is... sticky.",
-    "Your hormones have awful taste.",
-    "Let’s put the aux down and pick up a Bible."
+        "R&B used to be smooth. This is... sticky.",
+        "Your hormones have awful taste.",
+        "Let’s put the aux down and pick up a Bible."
     ]
-    
 }
 
 def format_reply(video, genres=None):
     duration = parse_duration(video["duration"])
     bar = build_media_bar(duration)
 
-    # Determine snark: genre-based or random
     matched = [g for g in (genres or []) if g.lower() in genre_snark_map]
     if matched:
-        snark = genre_snark_map[matched[0]]
+        snark = random.choice(genre_snark_map[matched[0]])
     else:
-        snark = get_snark_reply() if random.random() < 0.25 else ""
+        snark = get_fallback_snark() if random.random() < 0.25 else ""
 
     return f"""**NOW PLAYING:**
 
