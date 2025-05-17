@@ -1,13 +1,14 @@
 import re
 import random
+import os
 from youtube_client import search_youtube_video
 from formatter import format_reply
 from spotify_client import get_genres_for_song
 from snark_pool import get_genre_snark, get_fallback_snark
 
 def handle_comment(comment):
-    # Avoid replying to itself
-    if str(comment.author).lower() == "yacht_test_bot":
+    # Avoid replying to itself based on the .env username
+    if str(comment.author).lower() == os.getenv("REDDIT_USERNAME", "").lower():
         return
 
     # Match "YachtThot play [song]" requests
