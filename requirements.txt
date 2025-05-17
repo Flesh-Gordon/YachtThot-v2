@@ -2,6 +2,4 @@ praw
 google-api-python-client
 python-dotenv
 isodate
-youtube-search-python
-firebase-admin
-requests
+yt_dlp
