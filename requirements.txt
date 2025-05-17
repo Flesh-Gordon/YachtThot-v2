@@ -2,3 +2,4 @@ praw
 google-api-python-client
 python-dotenv
 isodate
+youtube-search-python
