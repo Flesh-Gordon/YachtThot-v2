@@ -6,10 +6,9 @@ After=network.target
 Type=simple
 User=thefleshgordon
 WorkingDirectory=/home/thefleshgordon/YachtThot-v2
-ExecStart=/home/thefleshgordon/YachtThot-v2/venv/bin/python /home/thefleshgordon/YachtThot-v2/webhook_listener.py
+ExecStart=/home/thefleshgordon/YachtThot-v2/venv/bin/gunicorn -w 1 -b 0.0.0.0:5000 webhook_listener:app
 Restart=always
 Environment="PYTHONUNBUFFERED=1"
-Environment="DOTENV_PATH=/home/thefleshgordon/YachtThot-v2/.env"
 
 [Install]
 WantedBy=multi-user.target
