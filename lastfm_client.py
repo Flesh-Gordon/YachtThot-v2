@@ -1,34 +1,27 @@
-import requests
-import os
-from dotenv import load_dotenv
+import re
+from lastfm_client import get_lastfm_tags
 
-load_dotenv()
+def clean_title_for_lastfm(title):
+    # Remove content in parentheses or brackets, trim whitespace
+    return re.sub(r"[\[\(].*?[\]\)]", "", title).strip()
 
-API_KEY = os.getenv("LASTFM_API_KEY")
-BASE_URL = "http://ws.audioscrobbler.com/2.0/"
+def detect_genres_from_metadata(video_title, artist=None):
+    """
+    Given a YouTube video title and optional artist name,
+    returns a list of genre tags using Last.fm.
+    """
+    cleaned_title = clean_title_for_lastfm(video_title)
+    print(f"[Genre Detector] Cleaned title: {cleaned_title}")
 
-def get_lastfm_tags(track_title, artist_name=None):
-    params = {
-        "method": "track.gettoptags",
-        "api_key": API_KEY,
-        "format": "json",
-        "track": track_title
-    }
+    # If artist is provided separately, use it with track title
+    if artist:
+        genres = get_lastfm_tags(cleaned_title, artist)
+    else:
+        genres = get_lastfm_tags(cleaned_title)
 
-    if artist_name:
-        params["artist"] = artist_name
+    if not genres:
+        print("[Genre Detector] No genres found.")
+    else:
+        print(f"[Genre Detector] Genres detected: {genres}")
 
-    try:
-        response = requests.get(BASE_URL, params=params)
-        data = response.json()
-
-        tags = data.get("toptags", {}).get("tag", [])
-        tag_list = [tag["name"].lower() for tag in tags if int(tag.get("count", 0)) > 10]
-
-        top_tags = tag_list[:5]  # return top 5 tags max
-        print(f"[Last.fm Tags] Tags for '{track_title}': {top_tags}")
-        return top_tags
-
-    except Exception as e:
-        print(f"[Last.fm Error] {e}")
-        return []
+    return genres
