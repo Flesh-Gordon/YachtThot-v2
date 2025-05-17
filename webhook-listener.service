@@ -9,6 +9,7 @@ WorkingDirectory=/home/thefleshgordon/YachtThot-v2
 ExecStart=/home/thefleshgordon/YachtThot-v2/venv/bin/python /home/thefleshgordon/YachtThot-v2/webhook_listener.py
 Restart=always
 Environment="PYTHONUNBUFFERED=1"
+Environment="DOTENV_PATH=/home/thefleshgordon/YachtThot-v2/.env"
 
 [Install]
 WantedBy=multi-user.target
