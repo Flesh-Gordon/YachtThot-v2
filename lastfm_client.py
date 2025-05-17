@@ -25,7 +25,10 @@ def get_lastfm_tags(track_title, artist_name=None):
         tags = data.get("toptags", {}).get("tag", [])
         tag_list = [tag["name"].lower() for tag in tags if int(tag.get("count", 0)) > 10]
 
-        return tag_list[:5]  # return top 5 tags max
+        top_tags = tag_list[:5]  # return top 5 tags max
+        print(f"[Last.fm Tags] Tags for '{track_title}': {top_tags}")
+        return top_tags
+
     except Exception as e:
         print(f"[Last.fm Error] {e}")
         return []
