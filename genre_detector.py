@@ -10,4 +10,8 @@ def detect_genre_tags(track_title):
 
     # Combine and deduplicate
     combined = list(set(spotify_genres + lastfm_tags))
+    
+    # Optional debug log
+    print(f"[GenreDetector] Combined tags for '{track_title}': {combined}")
+    
     return combined
